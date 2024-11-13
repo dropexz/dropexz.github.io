@@ -87,7 +87,7 @@
 
                     if (distance <= maxDistance) {
                         // Usuário está dentro da área permitida, redireciona para o Google Forms
-                        window.location.href = `https://docs.google.com/forms/d/e/1FAIpQLSfk7wQLseKkbjy1suRwAyfdN31qZCgPlXj9eFWefBi2_V9KlQ/viewform?usp=sf_link&entry.123456=${latitude}&entry.654321=${longitude}`;
+                        window.location.href = `&entry.123456=${latitude}&entry.654321=${longitude}`;
                     } else {
                         alert("Você não está dentro do local do evento.");
                     }
