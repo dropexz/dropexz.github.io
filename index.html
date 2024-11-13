@@ -4,9 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmar Presença</title>
+    <style>
+        /* Reset de estilos padrão */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #7a4dff, #4527a0); /* Gradiente roxo */
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            animation: fadeIn 1.5s ease-in-out;
+            animation-delay: 0.5s;
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+    </style>
 </head>
 <body>
-    <h2>Confirmando sua presença...</h2>
+    <div>
+        <h2>Confirmando sua presença...</h2>
+        <p>Estamos verificando se você está no local do evento.</p>
+    </div>
+
     <script>
         // Coordenadas do evento
         const eventLatitude = -25.435298;  // Latitude do evento
@@ -25,26 +74,29 @@
             return R * c; // Retorna a distância em metros
         }
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                const distance = calculateDistance(eventLatitude, eventLongitude, latitude, longitude);
-                console.log(`Distância calculada: ${distance} metros`); // Verifique a distância no console
-                console.log(`Latitude do evento: ${eventLatitude}, Longitude do evento: ${eventLongitude}`);
-                console.log(`Sua Latitude: ${latitude}, Sua Longitude: ${longitude}`);
+        // Verificação da localização automaticamente ao carregar a página
+        window.onload = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    const distance = calculateDistance(eventLatitude, eventLongitude, latitude, longitude);
+                    console.log(`Distância calculada: ${distance} metros`); // Verifique a distância no console
+                    console.log(`Latitude do evento: ${eventLatitude}, Longitude do evento: ${eventLongitude}`);
+                    console.log(`Sua Latitude: ${latitude}, Sua Longitude: ${longitude}`);
 
-                if (distance <= maxDistance) {
-                    // Usuário está dentro da área permitida, redireciona para o Google Forms
-                    window.location.href = `https://docs.google.com/forms/d/e/1FAIpQLSfk7wQLseKkbjy1suRwAyfdN31qZCgPlXj9eFWefBi2_V9KlQ/viewform?usp=sf_link&entry.123456=${latitude}&entry.654321=${longitude}`;
-                } else {
-                    alert("Você não está dentro do local do evento.");
-                }
-            }, (error) => {
-                alert("Não foi possível acessar a localização.");
-            }, { enableHighAccuracy: true, timeout: 5000 });
-        } else {
-            alert("Geolocalização não é suportada pelo seu navegador.");
+                    if (distance <= maxDistance) {
+                        // Usuário está dentro da área permitida, redireciona para o Google Forms
+                        window.location.href = `https://docs.google.com/forms/d/e/1FAIpQLSfk7wQLseKkbjy1suRwAyfdN31qZCgPlXj9eFWefBi2_V9KlQ/viewform?usp=sf_link&entry.123456=${latitude}&entry.654321=${longitude}`;
+                    } else {
+                        alert("Você não está dentro do local do evento.");
+                    }
+                }, (error) => {
+                    alert("Não foi possível acessar a localização.");
+                }, { enableHighAccuracy: true, timeout: 5000 });
+            } else {
+                alert("Geolocalização não é suportada pelo seu navegador.");
+            }
         }
     </script>
 </body>
